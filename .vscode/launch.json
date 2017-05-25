@@ -8,8 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceRoot}/index.js",
-            "runtimeExecutable": "./node_modules/nodemon/nodemon"
+            "program": "${workspaceRoot}/index.js"
         }
     ]
 }
