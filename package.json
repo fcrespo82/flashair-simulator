@@ -1,0 +1,20 @@
+{
+  "name": "flashair-simulator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.2",
+    "express-query-int": "^1.0.1",
+    "lodash": "^4.17.4"
+  },
+  "author": "Fernando Crespo",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
