@@ -87,66 +87,47 @@ var thumbnail_cgi = function(req, res, next) {
     res.set({'Content-Type':'image/jpeg'})
     const image = req._parsedUrl.query
 
-try {
-    
-    var buffer = fs.readFileSync('./sdcard/' + image)
+    try {
+        
+        var buffer = fs.readFileSync('./sdcard/' + image)
 
-    var parser = require('exif-parser').create(buffer);
-    var result = parser.parse();
+        var parser = require('exif-parser').create(buffer);
+        var result = parser.parse();
 
-    var headers = {
-        'X-exif-WIDTH': result.imageSize.width,
-        'X-exif-HEIGHT': result.imageSize.heigth,
-        'X-exif-ORIENTATION': result.tags.orientation
+        var headers = {
+            'X-exif-WIDTH': result.imageSize.width,
+            'X-exif-HEIGHT': result.imageSize.height,
+            'X-exif-ORIENTATION': result.tags.Orientation ? result.tags.Orientation : 0
+        }
+
+        res.set(headers)
+
+        res.send(result.getThumbnailBuffer())
+    } catch (error) {
+        res.send()    
     }
-
-    res.set(headers)
-
-    res.send(result.getThumbnailBuffer())
-} catch (error) {
-    res.send()    
-}
-
-    // var ExifImage = require('exif').ExifImage;
-
-    // new ExifImage({ image : './sdcard/' + image }, function (error, exifData) {
-    //     if (error)
-    //         console.log('Error: ' + error.message);
-    //     else {
-    //         var headers = {
-    //             'X-exif-WIDTH': exifData.thumbnail.XResolution,
-    //             'X-exif-HEIGHT': exifData.thumbnail.YResolution,
-    //             'X-exif-ORIENTATION': exifData.orientation
-    //         }
-
-    //         var buffer = new Buffer(exifData.thumbnail.ThumbnailLength)
-    //         fd = fs.openSync('./sdcard/' + image, 'r')
-            
-    //         fs.readSync(fd, buffer, 0, exifData.thumbnail.ThumbnailLength, exifData.thumbnail.ThumbnailOffset)
-
-    //         console.log(buffer)
-    //         var jpeg = require('jpeg-js');
-
-    //         var img = jpeg.encode(buffer)
-
-    //         res.set(headers)
-    //         fs.writeFileSync('./test.jpg', img, 'binary')
-    //                     console.log(img)
-
-    //         res.send(img)
-    //         //request('https://placehold.it/'+exifData.thumbnail.XResolution+'x'+exifData.thumbnail.YResolution+'.jpg').pipe(res)
-
-    //     }
-    // });
 }
 
 var upload_cgi = function(req, res, next) {
     res.status(501).send('Not yet implemented')
 }
 
+var photos = function(req, res, next) {
+    res.set({'Content-Type':'image/jpeg'})
+    const image = req._parsedUrl.path
+    try {
+        var buffer = fs.readFileSync('./sdcard/' + image)
+        res.send(buffer)
+    } catch (error) {
+        res.send()    
+    }
+
+}
+
 module.exports = {
     command_cgi,
     config_cgi,
     thumbnail_cgi,
-    upload_cgi
+    upload_cgi,
+    photos
 }

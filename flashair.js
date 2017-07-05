@@ -12,6 +12,8 @@ module.exports = function(server) {
 
     server.route('/upload.cgi').get(FlashAirCard.upload_cgi)
 
+    server.route('/*').get(FlashAirCard.photos)
+
 }
 
 function randomItem(items) {
