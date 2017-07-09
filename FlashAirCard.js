@@ -15,7 +15,7 @@ var command_cgi = function(req, res, next){
         var files = items.map(function(item) {
             return `.${req.query.DIR},${item},0,16,994,129`
         }, this);
-        res.send(`WLANSD_FILELIST\r` + files.join('\r'))
+        res.send(`WLANSD_FILELIST\r\n` + files.join('\r\n'))
     } else if (req.query.op == 101 ) {
         res.send('100')
     } else if (req.query.op == 102) {
