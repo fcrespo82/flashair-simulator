@@ -8,12 +8,36 @@ function randomItem(items) {
     return items[index]
 }
 
+function encodeDate(date) {
+    let year = date.getFullYear() - 1980
+    let month = date.getMonth() + 1
+    let day = date.getDate()
+    return (year<<9) + (month<<5) + day
+}
+function encodeTime(date) {
+    let hour = date.getHours()
+    let minutes = date.getMinutes()
+    let seconds = date.getSeconds()
+    return (hour<<11) + (minutes<<5) + (seconds *2)
+}
+
 var command_cgi = function(req, res, next){
     res.set({'Content-Type':'text/plain'})
     if (req.query.op == 100) {
         const items = fs.readdirSync('./sdcard/' + req.query.DIR)
         var files = items.map(function(item) {
-            return `.${req.query.DIR},${item},0,16,994,129`
+            var tipo = 0
+            let stat = fs.statSync('./sdcard/' + req.query.DIR + "/" + item)
+            if (stat.isDirectory()) {
+                tipo = 16
+                
+            } else if (stat.isFile()) {
+                tipo = 32
+            }
+            let date = stat.ctimeMs
+            let dateS = encodeDate(new Date(date))
+            let timeS = encodeTime(new Date(date))
+            return `.${req.query.DIR},${item},${stat.size},${tipo},${dateS},${timeS}`
         }, this);
         res.send(`WLANSD_FILELIST\r\n` + files.join('\r\n'))
     } else if (req.query.op == 101 ) {
