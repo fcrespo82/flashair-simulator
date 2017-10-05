@@ -121,7 +121,7 @@ var thumbnail_cgi = function(req, res, next) {
         var headers = {
             'X-exif-WIDTH': result.imageSize.width,
             'X-exif-HEIGHT': result.imageSize.height,
-            'X-exif-ORIENTATION': result.tags.Orientation ? result.tags.Orientation : 0
+            'X-exif-ORIENTATION': result.tags.Orientation ? result.tags.Orientation : 1
         }
 
         res.set(headers)
