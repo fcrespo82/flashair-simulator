@@ -2,7 +2,7 @@ const _ = require('lodash')
 const http = require('http')
 const request = require('request');
 const fs = require('fs')
-
+const exifParser = require('exif-parser')
 function randomItem(items) {
     var index = Math.floor(Math.random() * items.length)
     return items[index]
@@ -43,7 +43,9 @@ var command_cgi = function(req, res, next){
     } else if (req.query.op == 101 ) {
         res.send('100')
     } else if (req.query.op == 102) {
-        res.send('0')
+        // Check if there is a new photo
+        var item = randomItem(['0','1'])
+        res.send(item)
     } else if (req.query.op == 104) {
         res.send('flashair_simulator')
     } else if (req.query.op == 105) {
@@ -79,9 +81,11 @@ var command_cgi = function(req, res, next){
     } else if (req.query.op == 190) {
         res.status(501).send('Not yet implemented')
     } else if (req.query.op == 200) {
+        // Enable PhotoShare for DIR
         var item = randomItem([[200, 'OK'],[400, 'Bad Request']])
         res.status(item[0]).send(item[1])
     }  else if (req.query.op == 201) {
+        // Disable PhotoShare
         var item = randomItem([[200, 'OK'],[400, 'Bad Request']])
         res.status(item[0]).send(item[1])
     } else if (req.query.op == 202) {
@@ -114,8 +118,7 @@ var thumbnail_cgi = function(req, res, next) {
     try {
         
         var buffer = fs.readFileSync('./sdcard/' + image)
-
-        var parser = require('exif-parser').create(buffer);
+        var parser = exifParser.create(buffer);
         var result = parser.parse();
 
         var headers = {
@@ -128,7 +131,7 @@ var thumbnail_cgi = function(req, res, next) {
 
         res.send(result.getThumbnailBuffer())
     } catch (error) {
-        res.send()    
+        res.status(500).send('Internal Error')
     }
 }
 
