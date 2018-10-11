@@ -3,53 +3,34 @@ const http = require('http')
 const request = require('request');
 const fs = require('fs')
 const exifParser = require('exif-parser')
+const FlashAirCard = require('./FlashAirCardV2')
+
+
+let card = new FlashAirCard()
+
 function randomItem(items) {
     var index = Math.floor(Math.random() * items.length)
     return items[index]
 }
 
-function encodeDate(date) {
-    let year = date.getFullYear() - 1980
-    let month = date.getMonth() + 1
-    let day = date.getDate()
-    return (year<<9) + (month<<5) + day
-}
-function encodeTime(date) {
-    let hour = date.getHours()
-    let minutes = date.getMinutes()
-    let seconds = date.getSeconds()
-    return (hour<<11) + (minutes<<5) + (seconds *2)
-}
+var command_cgi = function (req, res, next) {
+    res.set({ 'Content-Type': 'text/plain' })
 
-var command_cgi = function(req, res, next){
-    res.set({'Content-Type':'text/plain'})
     if (req.query.op == 100) {
-        const items = fs.readdirSync('./sdcard/' + req.query.DIR)
-        var files = items.map(function(item) {
-            var tipo = 0
-            let stat = fs.statSync('./sdcard/' + req.query.DIR + "/" + item)
-            if (stat.isDirectory()) {
-                tipo = 16
-                
-            } else if (stat.isFile()) {
-                tipo = 32
-            }
-            let date = stat.ctimeMs
-            let dateS = encodeDate(new Date(date))
-            let timeS = encodeTime(new Date(date))
-            return `.${req.query.DIR},${item},${stat.size},${tipo},${dateS},${timeS}`
-        }, this);
-        res.send(`WLANSD_FILELIST\r\n` + files.join('\r\n'))
-    } else if (req.query.op == 101 ) {
-        res.send('100')
+        let response = card.operation(req.query.op, { dir: req.query.DIR })
+        res.status(response.status).send(response.object)
+    } else if (req.query.op == 101) {
+        let response = card.operation(req.query.op, { dir: req.query.DIR })
+        res.status(response.status).send(response.object)
     } else if (req.query.op == 102) {
-        // Check if there is a new photo
-        var item = randomItem(['0','1'])
-        res.send(item)
+        let response = card.operation(req.query.op, { dir: req.query.DIR })
+        res.status(response.status).send(response.object)
     } else if (req.query.op == 104) {
-        res.send('flashair_simulator')
+        let response = card.operation(req.query.op, { dir: req.query.DIR })
+        res.status(response.status).send(response.object)
     } else if (req.query.op == 105) {
-        res.send('12345678')
+        let response = card.operation(req.query.op, { dir: req.query.DIR })
+        res.status(response.status).send(response.object)
     } else if (req.query.op == 106) {
         res.send('a41731f4d880')
     } else if (req.query.op == 107) {
@@ -59,14 +40,14 @@ var command_cgi = function(req, res, next){
     } else if (req.query.op == 109) {
         res.send('${req.query.DIR}/FA000001.JPG')
     } else if (req.query.op == 110) {
-        var item = randomItem(['0','2','3','4','5','6'])
+        var item = randomItem(['0', '2', '3', '4', '5', '6'])
         res.send(item)
     } else if (req.query.op == 111) {
         res.send('300000')
     } else if (req.query.op == 117) {
         res.send('0123ABCD4567EFGH')
     } else if (req.query.op == 118) {
-        var item = randomItem(['0','1'])
+        var item = randomItem(['0', '1'])
         res.send(item)
     } else if (req.query.op == 120) {
         res.send('02544d535730384708c00b78700d201')
@@ -81,29 +62,27 @@ var command_cgi = function(req, res, next){
     } else if (req.query.op == 190) {
         res.status(501).send('Not yet implemented')
     } else if (req.query.op == 200) {
-        // Enable PhotoShare for DIR
-        var item = randomItem([[200, 'OK'],[400, 'Bad Request']])
+        var item = randomItem([[200, 'OK'], [400, 'Bad Request']])
         res.status(item[0]).send(item[1])
-    }  else if (req.query.op == 201) {
-        // Disable PhotoShare
-        var item = randomItem([[200, 'OK'],[400, 'Bad Request']])
-        res.status(item[0]).send(item[1])
+    } else if (req.query.op == 201) {
+        let response = card.operation(req.query.op, { dir: req.query.DIR })
+        res.status(response.status).send(response.response)
     } else if (req.query.op == 202) {
-        var item = randomItem(['SHAREMODE','NORMALMODE'])
+        var item = randomItem(['SHAREMODE', 'NORMALMODE'])
         res.send(item)
     } else if (req.query.op == 203) {
         res.send('photoshare_simulator')
     } else if (req.query.op == 220) {
-        var item = randomItem(['0','1','2'])
+        var item = randomItem(['0', '1', '2'])
         res.send(item)
     } else if (req.query.op == 221) {
-        var item = randomItem(_.range(-48,54))
+        var item = randomItem(_.range(-48, 54))
         res.send(item.toString())
     }
 }
 
-var config_cgi = function(req, res, next) {
-    res.set({'Content-Type':'text/plain'})
+var config_cgi = function (req, res, next) {
+    res.set({ 'Content-Type': 'text/plain' })
     if (!req.query.MASTERCODE || req.query.MASTERCODE.length != 12) {
         res.status(500).send('ERROR')
     } else {
@@ -111,12 +90,12 @@ var config_cgi = function(req, res, next) {
     }
 }
 
-var thumbnail_cgi = function(req, res, next) {
-    res.set({'Content-Type':'image/jpeg'})
+var thumbnail_cgi = function (req, res, next) {
+    res.set({ 'Content-Type': 'image/jpeg' })
     const image = req._parsedUrl.query
 
     try {
-        
+
         var buffer = fs.readFileSync('./sdcard/' + image)
         var parser = exifParser.create(buffer);
         var result = parser.parse();
@@ -135,19 +114,22 @@ var thumbnail_cgi = function(req, res, next) {
     }
 }
 
-var upload_cgi = function(req, res, next) {
+var upload_cgi = function (req, res, next) {
     res.status(501).send('Not yet implemented')
 }
 
-var photos = function(req, res, next) {
-    res.set({'Content-Type':'image/jpeg'})
-    const image = req._parsedUrl.path
-    try {
-        var buffer = fs.readFileSync('./sdcard/' + image)
-        res.send(buffer)
-    } catch (error) {
-        res.send()    
-    }
+var photos = function (req, res, next) {
+    res.set({ 'Content-Type': 'image/jpeg' })
+    let response = card.photo({ path: req._parsedUrl.path })
+    console.log(response)
+    res.status(response.status).send(response.object)
+    // const image = req._parsedUrl.path
+    // try {
+    //     var buffer = fs.readFileSync('./sdcard/' + image)
+    //     res.send(buffer)
+    // } catch (error) {
+    //     res.send()
+    // }
 
 }
 
