@@ -1,14 +1,9 @@
 const _ = require('lodash')
 const fs = require('fs')
 const exifParser = require('exif-parser')
-const { cardV1, cardV2 } = require('./FlashAir/index')
+const { cardV1, cardV2, cardV3 } = require('./FlashAir/index')
 
-let card = new cardV2()
-
-function randomItem(items) {
-    var index = Math.floor(Math.random() * items.length)
-    return items[index]
-}
+let card = new cardV3()
 
 var command_cgi = function (req, res, next) {
 
@@ -36,21 +31,7 @@ var command_cgi = function (req, res, next) {
     let response = card.command(req.query.op, options)
     res.set(response.headers).status(response.status).send(response.object)
     
-    
-    // } else if (req.query.op == 110) {
-    //     var item = randomItem(['0', '2', '3', '4', '5', '6'])
-    //     res.send(item)
-    // } else if (req.query.op == 111) {
-    //     res.send('300000')
-    // } else if (req.query.op == 117) {
-    //     res.send('0123ABCD4567EFGH')
-    // } else if (req.query.op == 118) {
-    //     var item = randomItem(['0', '1'])
-    //     res.send(item)
-    // } else if (req.query.op == 120) {
-    //     res.send('02544d535730384708c00b78700d201')
-    // } else if (req.query.op == 121) {
-    //     res.send('174428')
+
     // } else if (req.query.op == 130) {
     //     res.status(501).send('Not yet implemented')
     // } else if (req.query.op == 131) {

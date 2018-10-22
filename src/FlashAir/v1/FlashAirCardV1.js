@@ -1,6 +1,6 @@
 const fs = require('fs')
-const Config = require('./Config')
 const exifParser = require('exif-parser')
+const Config = require('./Config')
 
 module.exports = class FlashAirCardV1 {
 	constructor(ssid, w_lan_mode) {
@@ -23,28 +23,28 @@ module.exports = class FlashAirCardV1 {
 	_ok(object, headers = { 'Content-Type': 'text/plain' }) {
 		return {
 			status: 200,
-			object: object.toString(),
+			object: object,
 			headers: headers
 		}
 	}
 	_bad(object, headers = { 'Content-Type': 'text/plain' }) {
 		return {
 			status: 400,
-			object: object.toString(),
+			object: object,
 			headers: headers
 		}
 	}
 	_notImplemented(object, headers = { 'Content-Type': 'text/plain' }) {
 		return {
 			status: 404,
-			object: object.toString(),
+			object: object,
 			headers: headers
 		}
 	}
 	_internalError(object, headers = { 'Content-Type': 'text/plain' }) {
 		return {
 			status: 500,
-			object: object.toString(),
+			object: object,
 			headers: headers
 		}
 	}
@@ -126,20 +126,17 @@ module.exports = class FlashAirCardV1 {
 
 	thumbnail(path) {
 		try {
-			var buffer = fs.readFileSync('./sdcard/' + path)
+			var buffer = fs.readFileSync('./sdcard/' + path);
 			var parser = exifParser.create(buffer);
 			var result = parser.parse();
 
 			var headers = {
-				'Content-Type': 'image/jpeg',
-				'X-exif-WIDTH': result.imageSize.width,
-				'X-exif-HEIGHT': result.imageSize.height,
-				'X-exif-ORIENTATION': result.tags.Orientation ? result.tags.Orientation : 1
+				'Content-Type': 'image/jpeg'
 			}
 
-			return this._ok(result.getThumbnailBuffer(), headers)
+			return this._ok(result.getThumbnailBuffer(), headers);
 		} catch (error) {
-			return this._internalError()
+			return this._internalError();
 		}
 	}
 }
