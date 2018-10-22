@@ -9,29 +9,29 @@ The server was not exhaustive tested and neither includes all [API](https://flas
 - [ ] command.cgi
     - [x] Get file list
     - [x] Get the number of files
-    - [ ] Get update status
-    - [ ] Get SSID
-    - [ ] Get network password
-    - [ ] Get MAC address
-    - [ ] Get browser language
-    - [ ] Get the firmware version
-    - [ ] Get the control image
-    - [ ] Get Wireless LAN mode
-    - [ ] Get Wireless LAN timeout length
-    - [ ] Get application unique information
-    - [ ] Get Upload parameters
-    - [ ] Get CID
-    - [ ] Get time stamp of write event
+    - [x] Get update status
+    - [x] Get SSID
+    - [x] Get network password
+    - [x] Get MAC address
+    - [x] Get browser language
+    - [x] Get the firmware version
+    - [x] Get the control image
+    - [x] Get Wireless LAN mode
+    - [x] Get Wireless LAN timeout length
+    - [x] Get application unique information
+    - [x] Get Upload parameters
+    - [x] Get CID
+    - [x] Get time stamp of write event
     - [ ] Get data from shared memory
     - [ ] Set data to shared memory
     - [ ] Get the number of empty sectors
     - [ ] Control SD Interface as user I/O
-    - [ ] Enable Photo Share mode
-    - [ ] Disable Photo Share mode
-    - [ ] Get Photo Share mode status
-    - [ ] Get SSID for Photo Share mode
-    - [ ] New Get FlashAir Drive(WebDAV) information
-    - [ ] Get timezone
+    - [x] Enable Photo Share mode
+    - [x] Disable Photo Share mode
+    - [x] Get Photo Share mode status
+    - [x] Get SSID for Photo Share mode
+    - [x] Get FlashAir Drive(WebDAV) information
+    - [Partialy] Get timezone
 - [ ] config.cgi
     - [ ] APPAUTOTIME
     - [ ] APPINFO
@@ -54,4 +54,4 @@ The server was not exhaustive tested and neither includes all [API](https://flas
     - [ ] Set system time
     - [ ] Restrict the write ability of host devices
 
-- [ ] Limit functions by the firmware version
+- [Partialy] Limit functions by the firmware version
