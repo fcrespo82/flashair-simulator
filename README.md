@@ -1,10 +1,8 @@
-# Simulador para Toshiba [FlashAir](https://flashair-developers.com)
+# Toshiba [FlashAir](https://flashair-developers.com) simulator
 
-Este projeto tem como intenção facilitar o processo de desenvolvimento de softwares que queiram usar as APIs do FlashAir pois o cartão nem sempre está diponível e tem algumas limitações (como o tempo de atividade).
+This project aims to facilitate the process of developing software that uses the FlashAir APIs since the FlashAir card is not always available and has some restrictions (such as uptime).
 
-O servidor não foi testado exaustivamente, e nem inclui todas as funcionalidades da [API](https://flashair-developers.com/en/documents/api/)
-
-Note que nem todas as funcionalidades estão presentes em todas as versões de firmware.
+The server was not exhaustive tested and neither includes all [API](https://flashair-developers.com/en/documents/api/) functionalities.
 
 ## ROADMAP 
 
@@ -56,9 +54,4 @@ Note que nem todas as funcionalidades estão presentes em todas as versões de f
     - [ ] Set system time
     - [ ] Restrict the write ability of host devices
 
-- [ ] Limitar as funções de acordo com a versão do firmware
-
-
-
-Toshiba FlashAir é um cartão SD com a funcionalidade Wi-Fi embutida para fácil acesso a seus arquivos.
-
+- [ ] Limit functions by the firmware version
