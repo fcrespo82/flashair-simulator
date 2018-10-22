@@ -7,9 +7,12 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceRoot}/index.js",
-            "cwd": "${workspaceFolder}"
+            "name": "nodemon",
+            "runtimeExecutable": "nodemon",
+            "program": "${workspaceFolder}/src/index.js",
+            "restart": true,
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
         }
     ]
 }
