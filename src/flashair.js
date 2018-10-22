@@ -16,7 +16,3 @@ module.exports = function(server) {
 
 }
 
-function randomItem(items) {
-    var index = Math.floor(Math.random() * items.length)
-    return items[index]
-}

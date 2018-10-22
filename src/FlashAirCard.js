@@ -3,8 +3,7 @@ const http = require('http')
 const request = require('request');
 const fs = require('fs')
 const exifParser = require('exif-parser')
-const FlashAirCard = require('./FlashAirCardV2')
-
+const FlashAirCard = require('./FlashAir/v2/FlashAirCardV2')
 
 let card = new FlashAirCard()
 
@@ -32,13 +31,17 @@ var command_cgi = function (req, res, next) {
         let response = card.operation(req.query.op, { dir: req.query.DIR })
         res.status(response.status).send(response.object)
     } else if (req.query.op == 106) {
-        res.send('a41731f4d880')
+        let response = card.operation(req.query.op)
+        res.status(response.status).send(response.object)
     } else if (req.query.op == 107) {
-        res.send(req.headers["accept-language"])
+        let response = card.operation(req.query.op, { language: req.headers["accept-language"] })
+        res.status(response.status).send(response.object)
     } else if (req.query.op == 108) {
-        res.send('F19BAW3AW2.00.00')
+        let response = card.operation(req.query.op, { dir: req.query.DIR })
+        res.status(response.status).send(response.object)
     } else if (req.query.op == 109) {
-        res.send('${req.query.DIR}/FA000001.JPG')
+        let response = card.operation(req.query.op)
+        res.status(response.status).send(response.object)
     } else if (req.query.op == 110) {
         var item = randomItem(['0', '2', '3', '4', '5', '6'])
         res.send(item)

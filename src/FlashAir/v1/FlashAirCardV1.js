@@ -1,12 +1,29 @@
 const fs = require('fs')
 
 module.exports = class FlashAirCardV1 {
-	constructor(ssid) {
+	constructor(ssid, w_lan_mode) {
+		this.config = new CONFIG()
+		
 		if (ssid) {
-			this.ssid = ssid
+			this.config.APPSSID = ssid
+			this.config.CIPATH = "/DCIM/100__TSB/FA000001.jpg"
+			if (!w_lan_mode) {
+				this.config.APPMODE = 4
+			} else {
+				this.config.APPMODE = w_lan_mode
+			}
 		} else {
-			this.ssid = 'flashair_v1_simulator'
+			this.config.APPSSID = 'flashair_v1_simulator'
 		}
+
+		this.write_CONFIG(this.config)
+	}
+
+	write_CONFIG(config) {
+		config.Vendor.CIPATH = this.CIPATH
+		config.Vendor.APPMODE = this.wirelessLanMode
+
+		config.save()
 	}
 
 	_ok(object) {
@@ -61,10 +78,18 @@ module.exports = class FlashAirCardV1 {
 				return this._ok(this.filesList(options).length.toString())
 			case 102: // Update status
 				return this._ok(this._randomItem(['0', '1']))
-			case 104:
-				return this._ok(this.ssid)
-			case 105:
+			case 104: // SSID
+				return this._ok(this.APPSSID)
+			case 105: // Network password
 				return this._ok(this.networkPassword)
+			case 106: // Get MAC address
+				return this._ok("a41731f4d880")
+			case 107: // Browser language
+				return this._ok(options.language)
+			case 108: // Firmware
+				return this._ok("F24BAW3AW1.00.00")
+			case 109: // Control image
+				return this._ok(this.CIPATH)
 			default:
 				return this._notImplemented('Not Implemented Yet')
 		}
