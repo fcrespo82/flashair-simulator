@@ -28,7 +28,7 @@ html(lang='en')
 
 		h2 Commands
 		each val in card.commands_enabled()
-			a.btn.btn-outline-primary(role="button", href=`javascript:alert(${val})`) #{val}
+			a.btn.btn-outline-primary(role="button", target="_blank", href=`javascript:alert(${val})`) #{val}
 		
-		a.btn.btn-outline-primary(role="button", href="/command.cgi?op=100&DIR=/DCIM") 100
-		a.btn.btn-outline-primary(role="button", href="/command.cgi?op=104") 104
+		a.btn.btn-outline-primary(role="button", target="_blank", href="/command.cgi?op=100&DIR=/DCIM") 100
+		a.btn.btn-outline-primary(role="button", target="_blank", href="/command.cgi?op=104") 104
