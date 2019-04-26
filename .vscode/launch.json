@@ -16,7 +16,7 @@
             "serverReadyAction": {
                 "action": "openExternally",
                 "pattern": "running on port ([0-9]+)",
-                "uriFormat": "http://localhost:%s/command.cgi?op=100&DIR=/DCIM",
+                "uriFormat": "http://localhost:%s/simulator",
             }
         }
     ]
