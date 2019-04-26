@@ -21,8 +21,8 @@ module.exports = class FlashAirCardV3 extends FlashAirCardV2 {
 			case 220:
 				return this._ok(this.web_dav)
 			case 221: // Timezone
-				// TODO: Improve logic
-				return this._ok("0")
+				const timezoneOffset = new Date().getTimezoneOffset() / 60 // Result in minutes, convert to hours
+				return this._ok(`${timezoneOffset * 4}`)
 			default:
 				return super.command(num, options)
 		}
@@ -38,7 +38,7 @@ module.exports = class FlashAirCardV3 extends FlashAirCardV2 {
 				'Content-Type': 'image/jpeg',
 				'X-exif-WIDTH': result.imageSize.width,
 				'X-exif-HEIGHT': result.imageSize.height,
-				'X-exif-ORIENTATION': result.tags.Orientation ? result.tags.Orientation : 1	
+				'X-exif-ORIENTATION': result.tags.Orientation ? result.tags.Orientation : 1
 			}
 
 			return this._ok(result.getThumbnailBuffer(), headers);
