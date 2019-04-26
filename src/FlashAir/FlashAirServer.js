@@ -1,19 +1,22 @@
+// @ts-check
+
+const path = require('path');
+
 const version = require('./Version')
 const cardV1 = require('./v1/FlashAirCardV1')
 const cardV2 = require('./v2/FlashAirCardV2')
 const cardV3 = require('./v3/FlashAirCardV3')
-module.exports = function (expressServer, versionNumber) {
-
+module.exports = function (expressServer, options) {
     let card = null
-    switch (versionNumber) {
+    switch (options.version) {
         case version.V1:
-            card = new cardV1()
+            card = new cardV1(options.ssid, options.w_lan_mode)
             break;
         case version.V2:
-            card = new cardV2()
+            card = new cardV2(options.ssid, options.w_lan_mode)
             break;
         case version.V3:
-            card = new cardV3()
+            card = new cardV3(options.ssid, options.w_lan_mode)
             break;
 
         default:
@@ -97,10 +100,14 @@ module.exports = function (expressServer, versionNumber) {
         res.status(501).send('Not yet implemented')
     }
 
-    var photos = function (req, res, next) {
+    const photos = function (req, res, next) {
         let response = card.photo(req._parsedUrl.path)
         res.set(response.headers)
         res.status(response.status).send(response.object)
+    }
+
+    const simulator = function (req, res, next) {
+        res.render('index', { ssid: card.config.Vendor.APPSSID, version: card.constructor.name })
     }
 
     expressServer.route('/command.cgi').get(command_cgi)
@@ -111,7 +118,10 @@ module.exports = function (expressServer, versionNumber) {
 
     expressServer.route('/upload.cgi').get(upload_cgi)
 
+    expressServer.route('/simulator').get(simulator)
+
     expressServer.route('/*').get(photos)
+
 
     return expressServer
 }
