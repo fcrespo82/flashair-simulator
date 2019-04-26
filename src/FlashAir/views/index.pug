@@ -22,9 +22,12 @@ html(lang='en')
 				tr
 					td SSID
 					td= ssid
+				tr
+					td Firmware
+					td= card.firmware
 
 		h2 Commands
-		each val in _.range(100, 104)
+		each val in card.commands_enabled()
 			a.btn.btn-outline-primary(role="button", href=`javascript:alert(${val})`) #{val}
 		
 		a.btn.btn-outline-primary(role="button", href="/command.cgi?op=100&DIR=/DCIM") 100

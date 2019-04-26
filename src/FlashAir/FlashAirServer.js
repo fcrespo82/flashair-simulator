@@ -32,19 +32,19 @@ module.exports = function (expressServer, options) {
         } else if (req.query.op == 101) {
             options = { dir: req.query.DIR }
         } else if (req.query.op == 102) {
-            options = { dir: req.query.DIR }
+            // no options
         } else if (req.query.op == 104) {
-            options = { dir: req.query.DIR }
+            // no options
         } else if (req.query.op == 105) {
-            options = { dir: req.query.DIR }
+            // no options
         } else if (req.query.op == 106) {
-            // pass
+            // no options
         } else if (req.query.op == 107) {
             options = { language: req.headers["accept-language"] }
         } else if (req.query.op == 108) {
-            options = { dir: req.query.DIR }
+            // no options
         } else if (req.query.op == 109) {
-            // pass
+            // no options
         }
 
         let response = card.command(req.query.op, options)
@@ -107,7 +107,7 @@ module.exports = function (expressServer, options) {
     }
 
     const simulator = function (req, res, next) {
-        res.render('index', { ssid: card.config.Vendor.APPSSID, version: card.constructor.name })
+        res.render('index', { ssid: card.config.Vendor.APPSSID, version: card.constructor.name, card: card })
     }
 
     expressServer.route('/command.cgi').get(command_cgi)

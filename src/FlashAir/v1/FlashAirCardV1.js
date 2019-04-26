@@ -1,4 +1,5 @@
 const fs = require('fs')
+const _ = require('lodash')
 const exifParser = require('exif-parser')
 const Config = require('../Config')
 const AbstractFlashAirCard = require('../AbstractFlashAirCard')
@@ -8,7 +9,8 @@ module.exports = class FlashAirCardV1 extends AbstractFlashAirCard {
 		super()
 		this.config = new Config()
 		this.config.Vendor.CIPATH = "/DCIM/100__TSB/FA000001.jpg"
-
+		this.firmware = "F24BAW3AW1.00.00"
+		
 		if (ssid) {
 			this.config.Vendor.APPSSID = ssid
 		} else {
@@ -22,6 +24,11 @@ module.exports = class FlashAirCardV1 extends AbstractFlashAirCard {
 		this.config.save()
 	}
 
+	commands_enabled() {
+		var commands = _.range(100, 103)
+		commands = commands.concat(_.range(104, 109))
+		return commands
+	}
 	command(num, options = null) {
 		let choice = Number.parseInt(num)
 		switch (choice) {
@@ -40,7 +47,7 @@ module.exports = class FlashAirCardV1 extends AbstractFlashAirCard {
 			case 107: // Browser language
 				return this._ok(options.language)
 			case 108: // Firmware
-				return this._ok("F24BAW3AW1.00.00")
+				return this._ok(this.firmware)
 			case 120:
 				return this._ok(this.config.Vendor.CID.toString())
 			default:

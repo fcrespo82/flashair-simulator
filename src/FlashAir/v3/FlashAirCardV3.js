@@ -9,6 +9,7 @@ module.exports = class FlashAirCardV3 extends FlashAirCardV2 {
 		} else {
 			super('flashair_v3_simulator', w_lan_mode)
 		}
+		this.firmware = "F24BAW3AW3.00.00"
 		this.web_dav = 0
 	}
 

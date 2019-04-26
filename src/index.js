@@ -9,7 +9,7 @@ server.use(function(req, res, next){
     next();
 });
   
-const flashAir = require('./FlashAir')(server, { version: 2 })
+const flashAir = require('./FlashAir')(server, { version: 3 })
 flashAir.use(bodyParser.json())
 flashAir.listen(port, function () {
     console.log(`FlashAir Simulator is running on port ${port}.`)

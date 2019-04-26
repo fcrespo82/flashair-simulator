@@ -7,6 +7,7 @@ module.exports = class FlashAirCardV2 extends FlashAirCardV1 {
 		} else {
 			super('flashair_v2_simulator', w_lan_mode)
 		}
+		this.firmware = "F19BAW2AW2.00.00"
 		this.startDate = new Date()
 		this.share_mode = undefined
 	}
