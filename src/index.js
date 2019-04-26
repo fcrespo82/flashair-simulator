@@ -1,14 +1,11 @@
 const port = 3003
 
 const bodyParser = require('body-parser')
-const express = require('express')
-const server = express()
-const flashair = require('./flashair')(server)
+const server = require('express')()
+const flashAir = require('./FlashAir')(server, 1)
 
-server.use(bodyParser.json())
+flashAir.use(bodyParser.json())
 
-server.listen(port, function() {
+flashAir.listen(port, function() {
     console.log(`FlashAir Simulator is running on port ${port}.`)
 })
-
-module.exports = server

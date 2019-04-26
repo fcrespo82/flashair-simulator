@@ -2,6 +2,7 @@ const FlashAirCardV1 = require('../v1/FlashAirCardV1')
 
 module.exports = class FlashAirCardV2 extends FlashAirCardV1 {
 	constructor(ssid, w_lan_mode) {
+		super(ssid, w_lan_mode)
 		if (ssid) {
 			super(ssid, w_lan_mode)
 		} else {
