@@ -21,8 +21,7 @@ module.exports = class FlashAirCardV3 extends FlashAirCardV2 {
 			case 220:
 				return this._ok(this.web_dav)
 			case 221: // Timezone
-				const timezoneOffset = new Date().getTimezoneOffset() / 60 // Result in minutes, convert to hours
-				return this._ok(`${timezoneOffset * 4}`)
+				return this._ok(this.config.Vendor.TIMEZONE)
 			default:
 				return super.command(num, options)
 		}
@@ -46,4 +45,18 @@ module.exports = class FlashAirCardV3 extends FlashAirCardV2 {
 			return this._internalError();
 		}
 	}
+
+	exec_config(query) {
+		let error = this._validate_config(query)
+		if (error) {
+			return error
+		} else {
+			if (query.TIMEZONE) {
+				this.config.Vendor.TIMEZONE = query.TIMEZONE
+			}
+			this.config.save()
+			return this._ok("SUCCESS")
+		}
+	}
+
 }

@@ -60,38 +60,11 @@ module.exports = function (expressServer, options) {
 
         let response = card.command(req.query.op, options)
         res.set(response.headers).status(response.status).send(response.object)
-
-        // } else if (req.query.op == 140) {
-        //     res.send('13952920/15228928,512')
-        // } else if (req.query.op == 190) {
-        //     res.status(501).send('Not yet implemented')
-        // } else if (req.query.op == 200) {
-        //     var item = randomItem([[200, 'OK'], [400, 'Bad Request']])
-        //     res.status(item[0]).send(item[1])
-        // } else if (req.query.op == 201) {
-        //     let response = card.command(req.query.op, { dir: req.query.DIR })
-        //     res.status(response.status).send(response.response)
-        // } else if (req.query.op == 202) {
-        //     var item = randomItem(['SHAREMODE', 'NORMALMODE'])
-        //     res.send(item)
-        // } else if (req.query.op == 203) {
-        //     res.send('photoshare_simulator')
-        // } else if (req.query.op == 220) {
-        //     var item = randomItem(['0', '1', '2'])
-        //     res.send(item)
-        // } else if (req.query.op == 221) {
-        //     var item = randomItem(_.range(-48, 54))
-        //     res.send(item.toString())
-        // }
     }
 
     var config_cgi = function (req, res, next) {
-        res.set({ 'Content-Type': 'text/plain' })
-        if (!req.query.MASTERCODE || req.query.MASTERCODE.length != 12) {
-            res.status(500).send('ERROR')
-        } else {
-            res.status(200).send('SUCCESS')
-        }
+        let response = card.exec_config(req.query)
+        res.set(response.headers).status(response.status).send(response.object)
     }
 
     var thumbnail_cgi = function (req, res, next) {

@@ -10,7 +10,7 @@ module.exports = class FlashAirCardV1 extends AbstractFlashAirCard {
 		this.config = new Config()
 		this.config.Vendor.CIPATH = "/DCIM/100__TSB/FA000001.jpg"
 		this.firmware = "F24BAW3AW1.00.00"
-		
+
 		if (ssid) {
 			this.config.Vendor.APPSSID = ssid
 		} else {
@@ -81,6 +81,31 @@ module.exports = class FlashAirCardV1 extends AbstractFlashAirCard {
 			return this._ok(result.getThumbnailBuffer(), headers);
 		} catch (error) {
 			return this._internalError();
+		}
+	}
+
+	exec_config(query) {
+		let error = this._validate_config(query)
+		if (error) {
+			return error
+		} else {
+			if (query.APPINFO) {
+				this.config.Vendor.APPINFO = query.APPINFO
+			}
+			if (query.APPMODE) {
+				this.config.Vendor.APPMODE = query.APPMODE
+			}
+			if (query.APPNETWORKKEY) {
+				this.config.Vendor.APPNETWORKKEY = query.APPNETWORKKEY
+			}
+			if (query.APPSSID) {
+				this.config.Vendor.APPSSID = query.APPSSID
+			}
+			if (query.CIPATH) {
+				this.config.Vendor.CIPATH = query.CIPATH
+			}
+			this.config.save()
+			return this._ok("SUCCESS")
 		}
 	}
 }

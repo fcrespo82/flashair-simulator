@@ -65,4 +65,9 @@ module.exports = class AbstractFlashAirCard {
 		}, this);
 		return files
 	}
+	_validate_config(query) {
+		if (!query.MASTERCODE || query.MASTERCODE.length != 12) {
+			return this._internalError("ERROR")
+		}
+	}
 }
