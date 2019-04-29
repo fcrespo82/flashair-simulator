@@ -23,8 +23,7 @@ module.exports = function (expressServer, options) {
             break;
     }
 
-
-    var command_cgi = function (req, res, next) {
+    function command_cgi(req, res, next) {
 
         let options;
         if (req.query.op == 100) {
@@ -58,16 +57,16 @@ module.exports = function (expressServer, options) {
             }
         }
 
-        let response = card.command(req.query.op, options)
+        let response = card.exec_command(req.query.op, options)
         res.set(response.headers).status(response.status).send(response.object)
     }
 
-    var config_cgi = function (req, res, next) {
+    function config_cgi(req, res, next) {
         let response = card.exec_config(req.query)
         res.set(response.headers).status(response.status).send(response.object)
     }
 
-    var thumbnail_cgi = function (req, res, next) {
+    function thumbnail_cgi (req, res, next) {
         const image = req._parsedUrl.query
         let response = card.thumbnail(image)
         res.set(response.headers)
@@ -75,17 +74,17 @@ module.exports = function (expressServer, options) {
 
     }
 
-    var upload_cgi = function (req, res, next) {
+    function upload_cgi (req, res, next) {
         res.status(501).send('Not yet implemented')
     }
 
-    const photos = function (req, res, next) {
+    function photos (req, res, next) {
         let response = card.photo(req._parsedUrl.path)
         res.set(response.headers)
         res.status(response.status).send(response.object)
     }
 
-    const simulator = function (req, res, next) {
+    function simulator (req, res, next) {
         res.render('index', { ssid: card.config.Vendor.APPSSID, version: card.constructor.name, card: card })
     }
 
@@ -100,7 +99,6 @@ module.exports = function (expressServer, options) {
     expressServer.route('/simulator').get(simulator)
 
     expressServer.route('/*').get(photos)
-
 
     return expressServer
 }

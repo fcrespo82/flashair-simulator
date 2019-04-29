@@ -29,7 +29,7 @@ module.exports = class FlashAirCardV1 extends AbstractFlashAirCard {
 		commands = commands.concat(_.range(104, 109))
 		return commands
 	}
-	command(num, options = null) {
+	exec_command(num, options = null) {
 		let choice = Number.parseInt(num)
 		switch (choice) {
 			case 100: // File list

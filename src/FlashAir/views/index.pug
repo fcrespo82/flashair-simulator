@@ -27,8 +27,8 @@ html(lang='en')
 					td= card.firmware
 
 		h2 Commands
-		each val in card.commands_enabled()
-			a.btn.btn-outline-primary(role="button", target="_blank", href=`javascript:alert(${val})`) #{val}
+		//- each val in card.commands_enabled()
+		//- 	a.btn.btn-outline-primary(role="button", target="_blank", href=`javascript:alert(${val})`) #{val}
 		
 		a.btn.btn-outline-primary(role="button", target="_blank", href="/command.cgi?op=100&DIR=/DCIM") 100
 		a.btn.btn-outline-primary(role="button", target="_blank", href="/command.cgi?op=104") 104

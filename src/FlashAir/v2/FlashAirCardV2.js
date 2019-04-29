@@ -13,7 +13,7 @@ module.exports = class FlashAirCardV2 extends FlashAirCardV1 {
 		this.shared_memory = "0".repeat(512)
 	}
 
-	command(num, options) {
+	exec_command(num, options) {
 		let choice = Number.parseInt(num)
 		switch (choice) {
 			case 108: // Firmware
@@ -57,7 +57,7 @@ module.exports = class FlashAirCardV2 extends FlashAirCardV1 {
 			case 203: // Photoshare SSID
 				return this._ok("photoshare_e8e0b756a7fb")
 			default:
-				return super.command(num, options)
+				return super.exec_command(num, options)
 		}
 	}
 

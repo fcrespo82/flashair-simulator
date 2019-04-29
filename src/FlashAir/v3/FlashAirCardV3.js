@@ -13,7 +13,7 @@ module.exports = class FlashAirCardV3 extends FlashAirCardV2 {
 		this.web_dav = 0
 	}
 
-	command(num, options) {
+	exec_command(num, options) {
 		let choice = Number.parseInt(num)
 		switch (choice) {
 			case 108: // Firmware
@@ -23,7 +23,7 @@ module.exports = class FlashAirCardV3 extends FlashAirCardV2 {
 			case 221: // Timezone
 				return this._ok(this.config.Vendor.TIMEZONE)
 			default:
-				return super.command(num, options)
+				return super.exec_command(num, options)
 		}
 	}
 
