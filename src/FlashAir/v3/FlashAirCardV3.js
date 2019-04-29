@@ -55,7 +55,7 @@ module.exports = class FlashAirCardV3 extends FlashAirCardV2 {
 				this.config.Vendor.TIMEZONE = query.TIMEZONE
 			}
 			this.config.save()
-			return this._ok("SUCCESS")
+			return super.exec_config(query)
 		}
 	}
 
