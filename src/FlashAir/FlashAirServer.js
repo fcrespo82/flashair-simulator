@@ -45,16 +45,22 @@ module.exports = function (expressServer, options) {
             // no options
         } else if (req.query.op == 109) {
             // no options
+        } else if (req.query.op == 130) {
+            options = {
+                addr: req.query.addr,
+                len: req.query.len
+            }
+        } else if (req.query.op == 131) {
+            options = {
+                addr: req.query.addr,
+                len: req.query.len,
+                data: req.query.data
+            }
         }
 
         let response = card.command(req.query.op, options)
         res.set(response.headers).status(response.status).send(response.object)
 
-
-        // } else if (req.query.op == 130) {
-        //     res.status(501).send('Not yet implemented')
-        // } else if (req.query.op == 131) {
-        //     res.status(501).send('Not yet implemented')
         // } else if (req.query.op == 140) {
         //     res.send('13952920/15228928,512')
         // } else if (req.query.op == 190) {

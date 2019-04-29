@@ -10,6 +10,7 @@ module.exports = class FlashAirCardV2 extends FlashAirCardV1 {
 		this.firmware = "F19BAW2AW2.00.00"
 		this.startDate = new Date()
 		this.share_mode = undefined
+		this.shared_memory = "0".repeat(512)
 	}
 
 	command(num, options) {
@@ -29,6 +30,10 @@ module.exports = class FlashAirCardV2 extends FlashAirCardV1 {
 				return this._ok(this.config.Vendor.UPLOAD.toString())
 			case 121:
 				return this._ok((new Date() - this.startDate).toString())
+			case 130:
+				return this._ok(this.read_memory(options.addr, options.len))
+			case 131:
+				return this._ok(this.write_memory(options.addr, options.len, options.data))
 			case 200:
 				if (this.share_mode === 'SHAREMODE') {
 					return this._bad('400 Bad Request')
@@ -56,4 +61,25 @@ module.exports = class FlashAirCardV2 extends FlashAirCardV1 {
 		}
 	}
 
+	read_memory(addr, len) {
+		if ((addr + len) <= 512) {
+			return this.shared_memory.substring(addr, addr + len)
+		} else {
+			return "ERROR"
+		}
+	}
+
+	write_memory(addr, len, data) {
+		if (data.length === parseInt(len)) {
+			let arr = this.shared_memory.split("")
+
+			let start = arr.splice(0, addr)
+			let finish = arr.splice(addr + len, 512)
+			
+			this.shared_memory = start.join("") + data + finish.join("")
+			return "SUCCESS"
+		} else {
+			return "ERROR"
+		}
+	}
 }
