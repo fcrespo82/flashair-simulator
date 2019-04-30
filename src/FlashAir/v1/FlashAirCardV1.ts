@@ -1,11 +1,15 @@
-const fs = require('fs')
-const _ = require('lodash')
-const exifParser = require('exif-parser')
-const Config = require('../Config')
-const AbstractFlashAirCard = require('../AbstractFlashAirCard')
+import fs from 'fs';
+import _ from 'lodash';
+import exifParser from 'exif-parser';
+import Config from '../Config';
+import AbstractFlashAirCard from '../AbstractFlashAirCard';
 
-module.exports = class FlashAirCardV1 extends AbstractFlashAirCard {
-	constructor(ssid, w_lan_mode) {
+export default class FlashAirCardV1 extends AbstractFlashAirCard {
+	config: Config
+	firmware: String
+	networkPassword: String = ""
+
+	constructor(ssid: String, w_lan_mode: Number) {
 		super()
 		this.config = new Config()
 		this.config.Vendor.CIPATH = "/DCIM/100__TSB/FA000001.jpg"
@@ -29,9 +33,9 @@ module.exports = class FlashAirCardV1 extends AbstractFlashAirCard {
 		commands = commands.concat(_.range(104, 109))
 		return commands
 	}
-	exec_command(num, options = null) {
-		let choice = Number.parseInt(num)
-		switch (choice) {
+	exec_command(num: Number, options: any | null = null) {
+		// let choice = Number.parseInt(num)
+		switch (num) {
 			case 100: // File list
 				return this._ok('WLANSD_FILELIST\r\n' + this._filesList(options.dir).join('\r\n'))
 			case 101: // File count 
@@ -68,7 +72,7 @@ module.exports = class FlashAirCardV1 extends AbstractFlashAirCard {
 		}
 	}
 
-	thumbnail(path) {
+	thumbnail(path: String) {
 		try {
 			var buffer = fs.readFileSync('./sdcard/' + path);
 			var parser = exifParser.create(buffer);
@@ -84,7 +88,7 @@ module.exports = class FlashAirCardV1 extends AbstractFlashAirCard {
 		}
 	}
 
-	exec_config(query) {
+	exec_config(query: any) {
 		let error = this._validate_config(query)
 		if (error) {
 			return error

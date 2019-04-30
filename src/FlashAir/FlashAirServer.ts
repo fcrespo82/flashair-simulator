@@ -1,13 +1,11 @@
-// @ts-check
+import version from './Version';
+import cardV1 from './v1/FlashAirCardV1';
+import cardV2 from './v2/FlashAirCardV2';
+import cardV3 from './v3/FlashAirCardV3';
+import AbstractFlashAirCard from './AbstractFlashAirCard';
 
-const path = require('path');
-
-const version = require('./Version')
-const cardV1 = require('./v1/FlashAirCardV1')
-const cardV2 = require('./v2/FlashAirCardV2')
-const cardV3 = require('./v3/FlashAirCardV3')
-module.exports = function (expressServer, options) {
-    let card = null
+const server = function (expressServer: Express.Application, options: any) {
+    let card: AbstractFlashAirCard
     switch (options.version) {
         case version.V1:
             card = new cardV1(options.ssid, options.w_lan_mode)
@@ -66,7 +64,7 @@ module.exports = function (expressServer, options) {
         res.set(response.headers).status(response.status).send(response.object)
     }
 
-    function thumbnail_cgi (req, res, next) {
+    function thumbnail_cgi(req, res, next) {
         const image = req._parsedUrl.query
         let response = card.thumbnail(image)
         res.set(response.headers)
@@ -74,17 +72,17 @@ module.exports = function (expressServer, options) {
 
     }
 
-    function upload_cgi (req, res, next) {
+    function upload_cgi(req, res, next) {
         res.status(501).send('Not yet implemented')
     }
 
-    function photos (req, res, next) {
+    function photos(req, res, next) {
         let response = card.photo(req._parsedUrl.path)
         res.set(response.headers)
         res.status(response.status).send(response.object)
     }
 
-    function simulator (req, res, next) {
+    function simulator(req, res, next) {
         res.render('index', { ssid: card.config.Vendor.APPSSID, version: card.constructor.name, card: card })
     }
 
@@ -103,3 +101,4 @@ module.exports = function (expressServer, options) {
     return expressServer
 }
 
+export default server
