@@ -1,9 +1,10 @@
-const fs = require('fs')
-const exifParser = require('exif-parser')
-const FlashAirCardV2 = require('../v2/FlashAirCardV2')
+import fs from 'fs';
+import exifParser from 'exif-parser';
+import FlashAirCardV2 from '../v2/FlashAirCardV2';
 
-module.exports = class FlashAirCardV3 extends FlashAirCardV2 {
-	constructor(ssid, w_lan_mode) {
+export default class FlashAirCardV3 extends FlashAirCardV2 {
+	web_dav: number
+	constructor(ssid: string, w_lan_mode: number) {
 		if (ssid) {
 			super(ssid, w_lan_mode)
 		} else {
@@ -13,9 +14,8 @@ module.exports = class FlashAirCardV3 extends FlashAirCardV2 {
 		this.web_dav = 0
 	}
 
-	exec_command(num, options) {
-		let choice = Number.parseInt(num)
-		switch (choice) {
+	exec_command(num: number, options: any) {
+		switch (num) {
 			case 108: // Firmware
 				return this._ok("F19BAW3AW2.00.00")
 			case 220:
@@ -27,7 +27,7 @@ module.exports = class FlashAirCardV3 extends FlashAirCardV2 {
 		}
 	}
 
-	thumbnail(path) {
+	thumbnail(path: string) {
 		try {
 			var buffer = fs.readFileSync('./sdcard/' + path);
 			var parser = exifParser.create(buffer);
@@ -46,7 +46,7 @@ module.exports = class FlashAirCardV3 extends FlashAirCardV2 {
 		}
 	}
 
-	exec_config(query) {
+	exec_config(query: any) {
 		let error = this._validate_config(query)
 		if (error) {
 			return error

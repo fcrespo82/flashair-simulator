@@ -5,11 +5,10 @@ import Config from '../Config';
 import AbstractFlashAirCard from '../AbstractFlashAirCard';
 
 export default class FlashAirCardV1 extends AbstractFlashAirCard {
-	config: Config
-	firmware: String
-	networkPassword: String = ""
+	firmware: string
+	networkPassword: string = ""
 
-	constructor(ssid: String, w_lan_mode: Number) {
+	constructor(ssid: string, w_lan_mode: number) {
 		super()
 		this.config = new Config()
 		this.config.Vendor.CIPATH = "/DCIM/100__TSB/FA000001.jpg"
@@ -33,8 +32,8 @@ export default class FlashAirCardV1 extends AbstractFlashAirCard {
 		commands = commands.concat(_.range(104, 109))
 		return commands
 	}
-	exec_command(num: Number, options: any | null = null) {
-		// let choice = Number.parseInt(num)
+
+	exec_command(num: number, options: any | null = null) {
 		switch (num) {
 			case 100: // File list
 				return this._ok('WLANSD_FILELIST\r\n' + this._filesList(options.dir).join('\r\n'))
@@ -59,7 +58,7 @@ export default class FlashAirCardV1 extends AbstractFlashAirCard {
 		}
 	}
 
-	photo(path) {
+	photo(path: string) {
 		const image = path
 		try {
 			var buffer = fs.readFileSync('./sdcard/' + image)
@@ -72,7 +71,7 @@ export default class FlashAirCardV1 extends AbstractFlashAirCard {
 		}
 	}
 
-	thumbnail(path: String) {
+	thumbnail(path: string) {
 		try {
 			var buffer = fs.readFileSync('./sdcard/' + path);
 			var parser = exifParser.create(buffer);

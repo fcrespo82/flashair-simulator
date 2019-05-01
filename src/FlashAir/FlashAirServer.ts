@@ -2,9 +2,10 @@ import version from './Version';
 import cardV1 from './v1/FlashAirCardV1';
 import cardV2 from './v2/FlashAirCardV2';
 import cardV3 from './v3/FlashAirCardV3';
+import { Application } from 'express';
 import AbstractFlashAirCard from './AbstractFlashAirCard';
 
-const server = function (expressServer: Express.Application, options: any) {
+const server = function (expressServer: Application, options: any) {
     let card: AbstractFlashAirCard
     switch (options.version) {
         case version.V1:
@@ -21,6 +22,7 @@ const server = function (expressServer: Express.Application, options: any) {
             break;
     }
 
+    //@ts-ignore
     function command_cgi(req, res, next) {
 
         let options;
@@ -59,11 +61,13 @@ const server = function (expressServer: Express.Application, options: any) {
         res.set(response.headers).status(response.status).send(response.object)
     }
 
+    //@ts-ignore
     function config_cgi(req, res, next) {
         let response = card.exec_config(req.query)
         res.set(response.headers).status(response.status).send(response.object)
     }
 
+    //@ts-ignore
     function thumbnail_cgi(req, res, next) {
         const image = req._parsedUrl.query
         let response = card.thumbnail(image)
@@ -72,16 +76,19 @@ const server = function (expressServer: Express.Application, options: any) {
 
     }
 
+    //@ts-ignore
     function upload_cgi(req, res, next) {
         res.status(501).send('Not yet implemented')
     }
 
+    //@ts-ignore
     function photos(req, res, next) {
         let response = card.photo(req._parsedUrl.path)
         res.set(response.headers)
         res.status(response.status).send(response.object)
     }
 
+    //@ts-ignore
     function simulator(req, res, next) {
         res.render('index', { ssid: card.config.Vendor.APPSSID, version: card.constructor.name, card: card })
     }

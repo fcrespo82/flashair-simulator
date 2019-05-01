@@ -1,7 +1,10 @@
-const FlashAirCardV1 = require('../v1/FlashAirCardV1')
+import FlashAirCardV1 from '../v1/FlashAirCardV1';
 
-module.exports = class FlashAirCardV2 extends FlashAirCardV1 {
-	constructor(ssid, w_lan_mode) {
+export default class FlashAirCardV2 extends FlashAirCardV1 {
+	startDate: Date
+	share_mode: any
+	shared_memory: string
+	constructor(ssid: string, w_lan_mode: number) {
 		if (ssid) {
 			super(ssid, w_lan_mode)
 		} else {
@@ -9,13 +12,12 @@ module.exports = class FlashAirCardV2 extends FlashAirCardV1 {
 		}
 		this.firmware = "F19BAW2AW2.00.00"
 		this.startDate = new Date()
-		this.share_mode = undefined
+		// this.share_mode = undefined
 		this.shared_memory = "0".repeat(512)
 	}
 
-	exec_command(num, options) {
-		let choice = Number.parseInt(num)
-		switch (choice) {
+	exec_command(num: number, options: any) {
+		switch (num) {
 			case 108: // Firmware
 				return this._ok("F19BAW3AW2.00.00")
 			case 109: // Control image
@@ -29,7 +31,7 @@ module.exports = class FlashAirCardV2 extends FlashAirCardV1 {
 			case 118:
 				return this._ok(this.config.Vendor.UPLOAD.toString())
 			case 121:
-				return this._ok((new Date() - this.startDate).toString())
+				return this._ok((Date.now() - this.startDate.valueOf()).toString())
 			case 130:
 				return this._ok(this.read_memory(options.addr, options.len))
 			case 131:
@@ -61,7 +63,7 @@ module.exports = class FlashAirCardV2 extends FlashAirCardV1 {
 		}
 	}
 
-	read_memory(addr, len) {
+	read_memory(addr: number, len: number) {
 		if ((addr + len) <= 512) {
 			return this.shared_memory.substring(addr, addr + len)
 		} else {
@@ -69,13 +71,13 @@ module.exports = class FlashAirCardV2 extends FlashAirCardV1 {
 		}
 	}
 
-	write_memory(addr, len, data) {
-		if (data.length === parseInt(len)) {
+	write_memory(addr: number, len: number, data: string) {
+		if (data.length === len) {
 			let arr = this.shared_memory.split("")
 
 			let start = arr.splice(0, addr)
 			let finish = arr.splice(addr + len, 512)
-			
+
 			this.shared_memory = start.join("") + data + finish.join("")
 			return "SUCCESS"
 		} else {

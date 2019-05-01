@@ -1,28 +1,41 @@
 import fs from 'fs';
+import Config from './Config';
 
-export default class AbstractFlashAirCard {
-	_ok(object: any = null, headers = { 'Content-Type': 'text/plain' }) {
+export class FlashAirResponse {
+	status: number = 200
+	object: any
+	headers: any
+}
+
+export default abstract class AbstractFlashAirCard {
+	config!: Config
+	abstract exec_command(_op: any, _options: any | undefined): FlashAirResponse
+	abstract exec_config(_query: any): FlashAirResponse
+	abstract thumbnail(_image: any): FlashAirResponse
+	abstract photo(_path: any): FlashAirResponse
+
+	_ok(object: any = null, headers = { 'Content-Type': 'text/plain' }): FlashAirResponse {
 		return {
 			status: 200,
 			object: object,
 			headers: headers
 		}
 	}
-	_bad(object: any = null, headers = { 'Content-Type': 'text/plain' }) {
+	_bad(object: any = null, headers = { 'Content-Type': 'text/plain' }): FlashAirResponse {
 		return {
 			status: 400,
 			object: object,
 			headers: headers
 		}
 	}
-	_notImplemented(object: any = null, headers = { 'Content-Type': 'text/plain' }) {
+	_notImplemented(object: any = null, headers = { 'Content-Type': 'text/plain' }): FlashAirResponse {
 		return {
 			status: 404,
 			object: object,
 			headers: headers
 		}
 	}
-	_internalError(object: any = null, headers = { 'Content-Type': 'text/plain' }) {
+	_internalError(object: any = null, headers = { 'Content-Type': 'text/plain' }): FlashAirResponse {
 		return {
 			status: 500,
 			object: object,
@@ -30,7 +43,7 @@ export default class AbstractFlashAirCard {
 		}
 	}
 
-	_randomItem(items: any[]) {
+	_randomItem(items: any[]): any {
 		var index = Math.floor(Math.random() * items.length)
 		return items[index]
 	}
@@ -48,7 +61,7 @@ export default class AbstractFlashAirCard {
 		return (hour << 11) + (minutes << 5) + (seconds * 2)
 	}
 
-	_filesList(dir: String) {
+	_filesList(dir: string) {
 		const items = fs.readdirSync('./sdcard/' + dir)
 		var files = items.map(function (item) {
 			var tipo = 0
@@ -59,6 +72,7 @@ export default class AbstractFlashAirCard {
 				tipo = 32
 			}
 			let date = stat.ctimeMs
+			// @ts-ignore
 			const flashAirCard: AbstractFlashAirCard = this;
 			let dateS = flashAirCard._encodeDate(new Date(date))
 			let timeS = flashAirCard._encodeTime(new Date(date))
@@ -66,10 +80,10 @@ export default class AbstractFlashAirCard {
 		}, this);
 		return files
 	}
-	_validate_config(query: any) {
+	_validate_config(query: any): FlashAirResponse {
 		if (!query.MASTERCODE || query.MASTERCODE.length != 12) {
 			return this._internalError("ERROR")
 		}
-		return true
+		return this._ok()
 	}
 }

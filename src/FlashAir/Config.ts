@@ -1,9 +1,10 @@
-const fs = require('fs')
-const ini = require('ini')
+import fs from 'fs';
+import ini from 'ini';
 
-module.exports = class Config {
-
-	constructor(path) {
+export default class Config {
+	PATH: string
+	config: any
+	constructor(path?: string) {
 		if (path) {
 			this.PATH = path
 		} else {

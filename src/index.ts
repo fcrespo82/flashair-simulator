@@ -1,8 +1,8 @@
 import path from 'path';
-const port = 3003
 import bodyParser from 'body-parser';
 import server from 'express';
 
+const port = 3003
 const app = server()
 app.set('view engine', 'pug')
 app.set('views', path.join(__dirname + '/FlashAir/views'))
@@ -12,8 +12,9 @@ app.use(function (_, res, next) {
     next();
 });
 
-const flashAir = require('./FlashAir')(app, { version: 1 })
-flashAir.use(bodyParser.json())
-flashAir.listen(port, function () {
+import flashAir from './FlashAir'
+const flashAirCard = flashAir(app, { version: 1 })
+flashAirCard.use(bodyParser.json())
+flashAirCard.listen(port, function () {
     console.log(`FlashAir Simulator is running on port ${port}.`)
 })
