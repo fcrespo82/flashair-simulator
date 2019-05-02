@@ -8,15 +8,21 @@
             "type": "node",
             "request": "attach",
             "name": "Attach by Process ID",
-            "processId": "${command:PickProcess}"
+            "processId": "${command:PickProcess}",
+            "sourceMaps": true,
+            "restart": true,
+            "protocol": "inspector"
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Node: nodemon",
             "runtimeExecutable": "nodemon",
-            "program": "${workspaceFolder}/dist/index.js",
-            // "args": ["--watch", "src/", "--exec", "ts-node ${workspaceFolder}/src/index.ts", "-e", "ts"],
+            // "program": "${workspaceFolder}/dist/index.js",
+            "args": [
+                "--inspect",
+                "${workspaceFolder}/src/index.ts"
+            ],
             "restart": true,
             "console": "integratedTerminal",
             "internalConsoleOptions": "openOnSessionStart",
@@ -24,8 +30,7 @@
                 "action": "openExternally",
                 "pattern": "running on port ([0-9]+)",
                 "uriFormat": "http://localhost:%s/simulator",
-            },
-            "preLaunchTask": "build"
+            }
         }
     ]
 }
