@@ -9,7 +9,7 @@ export class FlashAirResponse {
 
 export default abstract class AbstractFlashAirCard {
 	config!: Config
-	abstract exec_command(_op: any, _options: any | undefined): FlashAirResponse
+	abstract exec_command(_op: any, _parameters: any | undefined): FlashAirResponse
 	abstract exec_config(_query: any): FlashAirResponse
 	abstract thumbnail(_image: any): FlashAirResponse
 	abstract photo(_path: any): FlashAirResponse

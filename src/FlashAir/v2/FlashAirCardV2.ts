@@ -16,8 +16,8 @@ export default class FlashAirCardV2 extends FlashAirCardV1 {
 		this.shared_memory = "0".repeat(512)
 	}
 
-	exec_command(num: number, options: any) {
-		switch (num) {
+	exec_command(operation: number, parameters: any) {
+		switch (operation) {
 			case 108: // Firmware
 				return this._ok("F19BAW3AW2.00.00")
 			case 109: // Control image
@@ -33,9 +33,9 @@ export default class FlashAirCardV2 extends FlashAirCardV1 {
 			case 121:
 				return this._ok((Date.now() - this.startDate.valueOf()).toString())
 			case 130:
-				return this._ok(this.read_memory(options.addr, options.len))
+				return this._ok(this.read_memory(parameters.addr, parameters.len))
 			case 131:
-				return this._ok(this.write_memory(options.addr, options.len, options.data))
+				return this._ok(this.write_memory(parameters.addr, parameters.len, parameters.data))
 			case 200:
 				if (this.share_mode === 'SHAREMODE') {
 					return this._bad('400 Bad Request')
@@ -59,7 +59,7 @@ export default class FlashAirCardV2 extends FlashAirCardV1 {
 			case 203: // Photoshare SSID
 				return this._ok("photoshare_e8e0b756a7fb")
 			default:
-				return super.exec_command(num, options)
+				return super.exec_command(operation, parameters)
 		}
 	}
 

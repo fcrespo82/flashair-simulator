@@ -33,12 +33,12 @@ export default class FlashAirCardV1 extends AbstractFlashAirCard {
 		return commands
 	}
 
-	exec_command(num: number, options: any | null = null) {
-		switch (num) {
+	exec_command(operation: number, parameters: any | null = null) {
+		switch (operation) {
 			case 100: // File list
-				return this._ok('WLANSD_FILELIST\r\n' + this._filesList(options.dir).join('\r\n'))
+				return this._ok('WLANSD_FILELIST\r\n' + this._filesList(parameters.dir).join('\r\n'))
 			case 101: // File count 
-				return this._ok(this._filesList(options.dir).length.toString())
+				return this._ok(this._filesList(parameters.dir).length.toString())
 			case 102: // Update status
 				return this._ok(this._randomItem(['0', '1']))
 			case 104: // SSID
@@ -48,7 +48,7 @@ export default class FlashAirCardV1 extends AbstractFlashAirCard {
 			case 106: // Get MAC address
 				return this._ok("a41731f4d880")
 			case 107: // Browser language
-				return this._ok(options.language)
+				return this._ok(parameters.language)
 			case 108: // Firmware
 				return this._ok(this.firmware)
 			case 120:

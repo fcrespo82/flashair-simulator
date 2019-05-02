@@ -5,17 +5,17 @@ import cardV3 from './v3/FlashAirCardV3';
 import { Application } from 'express';
 import AbstractFlashAirCard from './AbstractFlashAirCard';
 
-const server = function (expressServer: Application, options: any) {
+const server = function (expressServer: Application, parameters: any) {
     let card: AbstractFlashAirCard
-    switch (options.version) {
+    switch (parameters.version) {
         case version.V1:
-            card = new cardV1(options.ssid, options.w_lan_mode)
+            card = new cardV1(parameters.ssid, parameters.w_lan_mode)
             break;
         case version.V2:
-            card = new cardV2(options.ssid, options.w_lan_mode)
+            card = new cardV2(parameters.ssid, parameters.w_lan_mode)
             break;
         case version.V3:
-            card = new cardV3(options.ssid, options.w_lan_mode)
+            card = new cardV3(parameters.ssid, parameters.w_lan_mode)
             break;
 
         default:
@@ -25,39 +25,40 @@ const server = function (expressServer: Application, options: any) {
     //@ts-ignore
     function command_cgi(req, res, next) {
 
-        let options;
+        let parameters;
         if (req.query.op == 100) {
-            options = { dir: req.query.DIR }
+            parameters = { dir: req.query.DIR }
         } else if (req.query.op == 101) {
-            options = { dir: req.query.DIR }
+            parameters = { dir: req.query.DIR }
         } else if (req.query.op == 102) {
-            // no options
+            // no parameters
         } else if (req.query.op == 104) {
-            // no options
+            // no parameters
         } else if (req.query.op == 105) {
-            // no options
+            // no parameters
         } else if (req.query.op == 106) {
-            // no options
+            // no parameters
         } else if (req.query.op == 107) {
-            options = { language: req.headers["accept-language"] }
+            parameters = { language: req.headers["accept-language"] }
         } else if (req.query.op == 108) {
-            // no options
+            // no parameters
         } else if (req.query.op == 109) {
-            // no options
+            // no parameters
         } else if (req.query.op == 130) {
-            options = {
+            parameters = {
                 addr: req.query.addr,
                 len: req.query.len
             }
         } else if (req.query.op == 131) {
-            options = {
+            parameters = {
                 addr: req.query.addr,
                 len: req.query.len,
                 data: req.query.data
             }
         }
 
-        let response = card.exec_command(req.query.op, options)
+        const option = parseInt(req.query.op)
+        let response = card.exec_command(option, parameters)
         res.set(response.headers).status(response.status).send(response.object)
     }
 
