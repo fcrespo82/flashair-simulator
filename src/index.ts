@@ -12,8 +12,8 @@ app.use(function (_, res, next) {
     next();
 });
 
-import flashAir from './FlashAir'
-const flashAirCard = flashAir(app, { version: 1 })
+import flashAir, { FlashAirVersion } from './FlashAir'
+const flashAirCard = flashAir(app, FlashAirVersion.V1)
 flashAirCard.use(bodyParser.json())
 flashAirCard.listen(port, function () {
     console.log(`FlashAir Simulator is running on port ${port}.`)
