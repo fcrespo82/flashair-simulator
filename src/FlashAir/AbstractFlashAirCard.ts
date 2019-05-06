@@ -10,6 +10,7 @@ export class FlashAirResponse {
 export interface FlashAirParameters {
 	ssid?: string
 	w_lan_mode?: number
+	CIPATH?: string
 }
 
 export default abstract class AbstractFlashAirCard {

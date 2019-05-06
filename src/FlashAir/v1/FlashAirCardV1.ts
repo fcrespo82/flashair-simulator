@@ -11,7 +11,6 @@ export default class FlashAirCardV1 extends AbstractFlashAirCard {
 	constructor(parameters?: FlashAirParameters) {
 		super()
 		this.config = new Config()
-		this.config.Vendor.CIPATH = "/DCIM/100__TSB/FA000001.jpg"
 		this.firmware = "F24BAW3AW1.00.00"
 
 		if (parameters && parameters.ssid) {
@@ -23,6 +22,11 @@ export default class FlashAirCardV1 extends AbstractFlashAirCard {
 			this.config.Vendor.APPMODE = parameters.w_lan_mode
 		} else {
 			this.config.Vendor.APPMODE = 4
+		}
+		if (parameters && parameters.CIPATH) {
+			this.config.Vendor.CIPATH = parameters.CIPATH
+		} else {
+			this.config.Vendor.CIPATH = "/DCIM/100__TSB/FA000001.jpg"
 		}
 		this.config.save()
 	}
