@@ -2,7 +2,7 @@ import cardV1 from './v1/FlashAirCardV1';
 import cardV2 from './v2/FlashAirCardV2';
 import cardV3 from './v3/FlashAirCardV3';
 import { Application } from 'express';
-import AbstractFlashAirCard from './AbstractFlashAirCard';
+import AbstractFlashAirCard, { FlashAirParameters } from './AbstractFlashAirCard';
 
 export enum FlashAirVersion {
 	V1,
@@ -10,18 +10,30 @@ export enum FlashAirVersion {
 	V3
 }
 
-const server = function (expressServer: Application, version: FlashAirVersion, parameters: any = null) {
+
+
+const server = function (expressServer: Application, version: FlashAirVersion, parameters?: FlashAirParameters) {
 	let card: AbstractFlashAirCard
 	switch (version) {
 		case FlashAirVersion.V1:
-			card = new cardV1(parameters.ssid, parameters.w_lan_mode)
+			if (parameters) {
+				card = new cardV1(parameters)
+			} else {
+				card = new cardV1()
+			}
 			break;
 		case FlashAirVersion.V2:
-			card = new cardV2(parameters.ssid, parameters.w_lan_mode)
-			break;
+			if (parameters) {
+				card = new cardV2(parameters)
+			} else {
+				card = new cardV2()
+			} break;
 		case FlashAirVersion.V3:
-			card = new cardV3(parameters.ssid, parameters.w_lan_mode)
-			break;
+			if (parameters) {
+				card = new cardV3(parameters)
+			} else {
+				card = new cardV3()
+			} break;
 		default:
 			break;
 	}

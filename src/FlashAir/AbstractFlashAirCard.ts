@@ -7,6 +7,11 @@ export class FlashAirResponse {
 	headers: any
 }
 
+export interface FlashAirParameters {
+	ssid?: string
+	w_lan_mode?: number
+}
+
 export default abstract class AbstractFlashAirCard {
 	config!: Config
 	abstract exec_command(_op: any, _parameters: any | undefined): FlashAirResponse

@@ -2,27 +2,27 @@ import fs from 'fs';
 import _ from 'lodash';
 import exifParser from 'exif-parser';
 import Config from '../Config';
-import AbstractFlashAirCard from '../AbstractFlashAirCard';
+import AbstractFlashAirCard, { FlashAirParameters } from '../AbstractFlashAirCard';
 
 export default class FlashAirCardV1 extends AbstractFlashAirCard {
 	firmware: string
 	networkPassword: string = ""
 
-	constructor(ssid: string, w_lan_mode: number) {
+	constructor(parameters?: FlashAirParameters) {
 		super()
 		this.config = new Config()
 		this.config.Vendor.CIPATH = "/DCIM/100__TSB/FA000001.jpg"
 		this.firmware = "F24BAW3AW1.00.00"
 
-		if (ssid) {
-			this.config.Vendor.APPSSID = ssid
+		if (parameters && parameters.ssid) {
+			this.config.Vendor.APPSSID = parameters.ssid
 		} else {
 			this.config.Vendor.APPSSID = 'flashair_v1_simulator'
 		}
-		if (!w_lan_mode) {
-			this.config.Vendor.APPMODE = 4
+		if (parameters && parameters.w_lan_mode) {
+			this.config.Vendor.APPMODE = parameters.w_lan_mode
 		} else {
-			this.config.Vendor.APPMODE = w_lan_mode
+			this.config.Vendor.APPMODE = 4
 		}
 		this.config.save()
 	}

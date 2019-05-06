@@ -1,14 +1,15 @@
 import fs from 'fs';
 import exifParser from 'exif-parser';
 import FlashAirCardV2 from '../v2/FlashAirCardV2';
+import { FlashAirParameters } from '../AbstractFlashAirCard';
 
 export default class FlashAirCardV3 extends FlashAirCardV2 {
 	web_dav: number
-	constructor(ssid: string, w_lan_mode: number) {
-		if (ssid) {
-			super(ssid, w_lan_mode)
+	constructor(parameters?: FlashAirParameters) {
+		if (parameters) {
+			super(parameters)
 		} else {
-			super('flashair_v3_simulator', w_lan_mode)
+			super({ ssid: 'flashair_v3_simulator' })
 		}
 		this.firmware = "F24BAW3AW3.00.00"
 		this.web_dav = 0

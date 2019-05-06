@@ -1,14 +1,15 @@
 import FlashAirCardV1 from '../v1/FlashAirCardV1';
+import { FlashAirParameters } from '../AbstractFlashAirCard';
 
 export default class FlashAirCardV2 extends FlashAirCardV1 {
 	startDate: Date
 	share_mode: any
 	shared_memory: string
-	constructor(ssid: string, w_lan_mode: number) {
-		if (ssid) {
-			super(ssid, w_lan_mode)
+	constructor(parameters?: FlashAirParameters) {
+		if (parameters) {
+			super(parameters)
 		} else {
-			super('flashair_v2_simulator', w_lan_mode)
+			super({ ssid: 'flashair_v2_simulator' })
 		}
 		this.firmware = "F19BAW2AW2.00.00"
 		this.startDate = new Date()
