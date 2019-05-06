@@ -61,7 +61,7 @@ export default abstract class AbstractFlashAirCard {
 		return (hour << 11) + (minutes << 5) + (seconds * 2)
 	}
 
-	_filesList(dir: string) {
+	_filesList(dir: string): string[] {
 		const items = fs.readdirSync('./sdcard/' + dir)
 		var files = items.map(function (item) {
 			var tipo = 0
